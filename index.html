@@ -7,20 +7,9 @@
 
 <body>
   Hello World
+  <script src="./index.js" type="text/javascript">
 
-  <script>
-    // Sprawdzam czy wtyczka Metamask jest zainstalowana w przegladarce
-    async function connect() {
-      if (typeof window.ethereum !== "undefined") {
-        // Wysylam request o polaczenie z dostepnymi kontami w Metamasku
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        document.getElementById("connectButton").innerHTML = "Connected!"
-      } else {
-        document.getElementById("connectButton").innerHTML = "Please Install Metamask!"
-      }
-    }
   </script>
-
   <button id="connectButton" onclick="connect()"> Connect </button>
 </body>
 

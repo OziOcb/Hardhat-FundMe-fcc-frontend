@@ -1,7 +1,9 @@
+// - https://docs.ethers.io/v5/getting-started/
 // Importuje ethers w ten sposob tylko kiedy uzywam czystego JS
 // We frameworkach instaluje ethers z npm i importuje normalnie
 // jak kazda inna paczke
 import { ethers } from "./ethers-5.6.esm.min.js"
+import { abi, contractAddress } from "./constants.js"
 
 const connectButton = document.getElementById("connectButton")
 const fundButton = document.getElementById("fundButton")
@@ -26,11 +28,24 @@ async function connect() {
   }
 }
 
-async function fund(ethAmount) {
+async function fund() {
+  const ethAmount = "0.1"
+  console.log(`Funding with ${ethAmount}`)
   if (typeof window.ethereum !== "undefined") {
     // Rzeczy ktorych potrzebuje
     // provider / czyli placzenie z blockchainem
     // signer / wallet / czyli cos za czego zaplace za gaz
-    // contract / z tego bede potrzebowal ABI i Address
+    // contract / z tego bede potrzebowal abi i Address
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const signer = provider.getSigner()
+    const contract = new ethers.Contract(contractAddress, abi, signer)
+    try {
+      const txResponse = await contract.fund({
+        value: ethers.utils.parseEther(ethAmount),
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }

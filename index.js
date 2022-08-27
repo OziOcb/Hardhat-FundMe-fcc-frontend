@@ -8,9 +8,11 @@ import { abi, contractAddress } from "./constants.js"
 const connectButton = document.getElementById("connectButton")
 const fundButton = document.getElementById("fundButton")
 const balanceButton = document.getElementById("balanceButton")
+const withdrawButton = document.getElementById("withdrawButton")
 connectButton.onclick = connect
 fundButton.onclick = fund
 balanceButton.onclick = getBalance
+withdrawButton.onclick = withdraw
 
 // prettier-ignore
 console.log("-\n--\n ethers \n >", ethers, "\n--\n-") // REMOVE_ME: remove when done!
@@ -57,6 +59,22 @@ async function fund() {
 
       await listenForTxMine(txResponse, provider)
       console.log("Done!")
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
+async function withdraw() {
+  console.log("Withdrawing...")
+  if (window.ethereum !== "undefined") {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const signer = provider.getSigner()
+    const contract = new ethers.Contract(contractAddress, abi, signer)
+    try {
+      const txResponse = await contract.withdraw()
+      await listenForTxMine(txResponse, provider)
+      console.log("Done!!!")
     } catch (error) {
       console.log(error)
     }

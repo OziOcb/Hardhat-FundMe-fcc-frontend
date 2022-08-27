@@ -44,8 +44,23 @@ async function fund() {
       const txResponse = await contract.fund({
         value: ethers.utils.parseEther(ethAmount),
       })
+
+      await listenForTxMine(txResponse, provider)
+      console.log("Done!")
     } catch (error) {
       console.log(error)
     }
   }
+}
+
+function listenForTxMine(TxResponse, provider) {
+  console.log(`Mining ${TxResponse.hash}...`)
+  // Zwracam Promise zeby miec pewnosc ze JS zaczeka na provide.once listener
+  return new Promise((resolve, reject) => {
+    // provide.once to event listener - https://docs.ethers.io/v5/api/providers/provider/#Provider-once
+    provider.once(TxResponse.hash, (txReceipt) => {
+      console.log(`Completed with ${txReceipt.confirmations} confirmations`)
+      resolve()
+    })
+  })
 }

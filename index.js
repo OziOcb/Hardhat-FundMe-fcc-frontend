@@ -7,8 +7,10 @@ import { abi, contractAddress } from "./constants.js"
 
 const connectButton = document.getElementById("connectButton")
 const fundButton = document.getElementById("fundButton")
+const balanceButton = document.getElementById("balanceButton")
 connectButton.onclick = connect
 fundButton.onclick = fund
+balanceButton.onclick = getBalance
 
 // prettier-ignore
 console.log("-\n--\n ethers \n >", ethers, "\n--\n-") // REMOVE_ME: remove when done!
@@ -25,6 +27,14 @@ async function connect() {
     connectButton.innerHTML = "Connected!"
   } else {
     connectButton.innerHTML = "Please Install Metamask!"
+  }
+}
+
+async function getBalance() {
+  if (typeof window.ethereum !== "undefined") {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const balance = await provider.getBalance(contractAddress)
+    console.log(ethers.utils.formatEther(balance))
   }
 }
 
